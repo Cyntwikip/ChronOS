@@ -1,0 +1,40 @@
+
+echo Now assembling, compiling, and linking your kernel:
+nasm -f elf32 start.asm -o start.o
+
+
+gcc -m32 -c main.c -o main.o
+
+gcc -m32 -c scrn.c -o scrn.o
+
+gcc -m32 -c gdt.c -o gdt.o
+
+gcc -m32 -c idt.c -o idt.o
+
+gcc -m32 -c isrs.c -o isrs.o
+
+gcc -m32 -c irq.c -o irq.o
+
+gcc -m32 -c timer.c -o timer.o
+
+gcc -m32 -c kb.c -o kb.o
+
+gcc -m32 -c marquee.c -o marquee.o
+
+gcc -m32 -c globals.c -o globals.o
+
+gcc -m32 -c movingstring.c -o ms.o
+
+gcc -m32 -c cs.c -o cs.o
+
+
+ld -m elf_i386 -T link.ld -o kernel start.o main.o scrn.o gdt.o idt.o isrs.o irq.o timer.o kb.o globals.o marquee.o globals.o ms.o cs.o
+
+rm *.o
+
+
+
+echo Done!
+
+
+qemu-system-i386 -kernel kernel
