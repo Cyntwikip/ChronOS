@@ -1,0 +1,72 @@
+-------------------------
+----Compile the codes----
+nasm -f elf32 <assembly file> -o <output assembly object file>
+nasm -f elf32 kernel.asm -o kasm.o
+**compiles the assembly kernel code...
+
+gcc -m32 -c <C file> -o <output C object file>
+gcc -m32 -c kernel.c -o kc.o
+**compiles the C kernel code...
+
+ld -m elf_i386 -T <linker file> -o <output kernel file> <assembly object file> <C object file> 
+ld -m elf_i386 -T link.ld -o kernel kasm.o kc.o
+**links the object files...
+
+
+--------------------------------
+----Test using QEMU emulator----
+qemu-system-i386 -kernel <kernel name>
+qemu-system-i386 -kernel kernel
+**runs the QEMU emulator...
+
+
+---------------------------------
+----Configure GRUB Bootloader----
+
+1. Copy the kernel inside /boot
+
+sudo cp <file source> <file destination>
+**copies the file...
+
+2. Add the kernel to bootloader
+
+for grub2:
+
+edit etc/grub.d/40_custom using:
+
+sudo gedit 40_custom --> to be able to select this kernel during bootloading
+or sudo gedit /etc/grub.d/40_custom
+
+then copy this...
+
+menuentry 'kernel-7001' {
+	set root='hd0,msdos1'
+	multiboot /boot/kernel-7001 ro
+}
+
+...Just add this inside 40_custom
+...This is basically for adding your kernel
+...Since ChronOS is my kernel, I did this.
+
+menuentry 'ChronOS-0001' {
+	set root='hd0,msdos1'
+	multiboot /boot/ChronOS-0001 ro
+}
+
+...the number after the kernel name is necessary
+...think of it as the version of Operating System
+
+3. Update GRUB bootloader 
+sudo update-grub
+**updates the GRUB bootloader
+
+
+
+
+sudo gedit grub.cfg
+**not working!!!
+
+cd Desktop/Kernel\ Trial/ChronOS8
+
+
+
